@@ -1,0 +1,39 @@
+@STIVE_HostAddress = http://localhost:5072
+
+GET {{STIVE_HostAddress}}/customer/customers/
+Accept: application/json
+
+###
+
+GET {{STIVE_HostAddress}}/customer/customers/1
+Accept: application/json
+
+###
+
+POST {{STIVE_HostAddress}}/customer/customers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "firstname": "Sylvain",
+  "lastname": "Durif",
+  "email": "sdurif@gmail.com"
+}
+
+###
+
+PUT {{STIVE_HostAddress}}/customer/customers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 1,
+  "email": "sdurif@mail.fr"
+}
+
+###
+
+DELETE {{STIVE_HostAddress}}/customer/customers/1
+Accept: application/json
+
+###
