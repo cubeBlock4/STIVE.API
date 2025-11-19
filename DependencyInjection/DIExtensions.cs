@@ -23,5 +23,6 @@ public static class DIExtensions
         );
 
         services.AddTransient<ICustomerRepository, CustomerRepository>();
+        services.AddTransient<ICustomerRepository, CustomersRepository>();
     }
 }
