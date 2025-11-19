@@ -12,9 +12,11 @@ public class StiveContext : DbContext
     }
     
     public DbSet<CustomerEntity> Customers { get; set; }
+    public DbSet<SupplierEntity> Suppliers { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new CustomerEntityConfirguration());
+        modelBuilder.ApplyConfiguration(new SupplierEntityConfirguration());
     }
 }

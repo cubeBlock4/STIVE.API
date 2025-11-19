@@ -1,5 +1,7 @@
 @STIVE_HostAddress = http://localhost:5072
 
+### CUSTOMERS
+
 GET {{STIVE_HostAddress}}/customers
 Accept: application/json
 
@@ -34,6 +36,44 @@ Content-Type: application/json
 ###
 
 DELETE {{STIVE_HostAddress}}/customers/1002
+Accept: application/json
+
+### SUPPLIERS
+
+GET {{STIVE_HostAddress}}/suppliers
+Accept: application/json
+
+###
+
+GET {{STIVE_HostAddress}}/suppliers/2
+Accept: application/json
+
+###
+
+POST {{STIVE_HostAddress}}/suppliers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "entreprisename": "Domain Blondel",
+  "email": "contact@dblondel.fr",
+  "phone": "0102030405"
+}
+
+###
+
+PUT {{STIVE_HostAddress}}/suppliers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 2,
+  "email": "contact@domain-blondel.fr"
+}
+
+###
+
+DELETE {{STIVE_HostAddress}}/suppliers/1
 Accept: application/json
 
 ###
