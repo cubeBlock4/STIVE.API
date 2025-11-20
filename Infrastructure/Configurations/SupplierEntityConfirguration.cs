@@ -13,5 +13,9 @@ public class SupplierEntityConfirguration : IEntityTypeConfiguration<SupplierEnt
         builder.Property(x => x.EntrepriseName).HasColumnName("EntrepriseName").IsRequired();
         builder.Property(x => x.Email).HasColumnName("Email").IsRequired();
         builder.Property(x => x.Phone).HasColumnName("Phone").IsRequired();
+        
+        builder.HasMany(x => x.Products)
+            .WithOne(x => x.Supplier)
+            .HasForeignKey(x => x.SupplierId);
     }
 }

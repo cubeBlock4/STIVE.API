@@ -76,4 +76,112 @@ Content-Type: application/json
 DELETE {{STIVE_HostAddress}}/suppliers/1
 Accept: application/json
 
+### Familles
+
+GET {{STIVE_HostAddress}}/suppliers
+Accept: application/json
+
 ###
+
+GET {{STIVE_HostAddress}}/suppliers/2
+Accept: application/json
+
+###
+
+POST {{STIVE_HostAddress}}/suppliers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "entreprisename": "Domain Blondel",
+  "email": "contact@dblondel.fr",
+  "phone": "0102030405"
+}
+
+###
+
+PUT {{STIVE_HostAddress}}/suppliers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 2,
+  "email": "contact@domain-blondel.fr"
+}
+
+###
+
+DELETE {{STIVE_HostAddress}}/suppliers/1
+Accept: application/json
+
+### Products
+
+GET {{STIVE_HostAddress}}/suppliers
+Accept: application/json
+
+###
+
+GET {{STIVE_HostAddress}}/suppliers/2
+Accept: application/json
+
+###
+
+POST {{STIVE_HostAddress}}/suppliers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "entreprisename": "Domain Blondel",
+  "email": "contact@dblondel.fr",
+  "phone": "0102030405"
+}
+
+###
+
+PUT {{STIVE_HostAddress}}/suppliers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 2,
+  "email": "contact@domain-blondel.fr"
+}
+
+###
+
+DELETE {{STIVE_HostAddress}}/suppliers/1
+Accept: application/json
+
+###
+
+GET {{STIVE_HostAddress}}/Familles
+Accept: application/json
+
+###
+
+GET {{STIVE_HostAddress}}/Products
+Accept: application/json
+
+###
+
+POST {{STIVE_HostAddress}}/familles
+Accept: application/json
+Content-Type: application/json
+
+{
+  "Name": "Rosé"
+}
+
+###
+
+POST {{STIVE_HostAddress}}/products
+Accept: application/json
+Content-Type: application/json
+
+{
+  "Name": "Test",
+  "Reference": "#001",
+  "Price": "10",
+  "FamilleId": 1,
+  "SupplierId": 2
+}
