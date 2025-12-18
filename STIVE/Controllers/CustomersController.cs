@@ -7,30 +7,30 @@ namespace STIVE.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CustomerController : ControllerBase
+public class CustomersController : ControllerBase
 {
     private readonly ICustomerRepository  _customerRepository;
 
-    public CustomerController(ICustomerRepository customerRepository)
+    public CustomersController(ICustomerRepository customerRepository)
     {
         _customerRepository = customerRepository;
     }
 
-    [HttpGet("customers")]
-    public async Task<IEnumerable<CustomerDto>> GetCustomers()
+    [HttpGet]
+    public async Task<IEnumerable<CustomerDto>> GetAll()
     {
         var customers = await _customerRepository.GetAllCustomers();
         return customers;
     }
 
-    [HttpGet("customers/{id}")]
-    public async Task<CustomerDto> GetCustomer(int id)
+    [HttpGet("{id:int}", Name = "GetCustomerById")]
+    public async Task<CustomerDto> GetCustomerById(int id)
     {
         var customer = await _customerRepository.GetCustomer(id);
         return customer;
     }
 
-    [HttpPost("customers")]
+    [HttpPost("/customers")]
     public async Task AddCustomer(AddCustomerRequest customerRequest)
     {
         await _customerRepository.CreateCustomer(
@@ -39,7 +39,7 @@ public class CustomerController : ControllerBase
             customerRequest.Email);
     }
 
-    [HttpPut("customers")]
+    [HttpPut("/customers")]
     public async Task UpdateCustomer(UpdateCustomerRequest customerRequest)
     {
         await _customerRepository.UpdateCustomer(
@@ -49,7 +49,7 @@ public class CustomerController : ControllerBase
             customerRequest.Email);
     }
 
-    [HttpDelete("customers/{id}")]
+    [HttpDelete("/customers/{id}")]
     public async Task DeleteCustomer(int id)
     {
         await _customerRepository.DeleteCustomer(id);

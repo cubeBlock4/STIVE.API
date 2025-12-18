@@ -1,16 +1,18 @@
 @STIVE_HostAddress = http://localhost:5072
 
-GET {{STIVE_HostAddress}}/customer/customers/
+### CUSTOMERS
+
+GET {{STIVE_HostAddress}}/customers
 Accept: application/json
 
 ###
 
-GET {{STIVE_HostAddress}}/customer/customers/1
+GET {{STIVE_HostAddress}}/customers/2
 Accept: application/json
 
 ###
 
-POST {{STIVE_HostAddress}}/customer/customers
+POST {{STIVE_HostAddress}}/customers
 Accept: application/json
 Content-Type: application/json
 
@@ -22,18 +24,56 @@ Content-Type: application/json
 
 ###
 
-PUT {{STIVE_HostAddress}}/customer/customers
+PUT {{STIVE_HostAddress}}/customers
 Accept: application/json
 Content-Type: application/json
 
 {
-  "id": 1,
-  "email": "sdurif@mail.fr"
+  "id": 1002,
+  "email": "sdurif@mail.frr"
 }
 
 ###
 
-DELETE {{STIVE_HostAddress}}/customer/customers/1
+DELETE {{STIVE_HostAddress}}/customers/1002
+Accept: application/json
+
+### SUPPLIERS
+
+GET {{STIVE_HostAddress}}/suppliers
+Accept: application/json
+
+###
+
+GET {{STIVE_HostAddress}}/suppliers/2
+Accept: application/json
+
+###
+
+POST {{STIVE_HostAddress}}/suppliers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "entreprisename": "Domain Blondel",
+  "email": "contact@dblondel.fr",
+  "phone": "0102030405"
+}
+
+###
+
+PUT {{STIVE_HostAddress}}/suppliers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 2,
+  "email": "contact@domain-blondel.fr"
+}
+
+###
+
+DELETE {{STIVE_HostAddress}}/suppliers/1
 Accept: application/json
 
 ###

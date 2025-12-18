@@ -22,6 +22,7 @@ public static class DIExtensions
             options => options.UseSqlServer(connectionString)
         );
 
-        services.AddTransient<ICustomerRepository, CustomerRepository>();
+        services.AddTransient<ICustomerRepository, CustomersRepository>();
+        services.AddTransient<ISupplierRepository, SuppliersRepository>();
     }
 }

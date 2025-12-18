@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class CustomerRepository : ICustomerRepository
+public class CustomersRepository : ICustomerRepository
 {
     
     private readonly StiveContext  _context;
 
-    public CustomerRepository(StiveContext context)
+    public CustomersRepository(StiveContext context)
     {
         _context = context;
     }
