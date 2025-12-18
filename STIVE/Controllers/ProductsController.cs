@@ -16,14 +16,14 @@ public class ProductsController : ControllerBase
         _productRepository = productRepository;
     }
 
-    [HttpGet]
+    [HttpGet("/products")]
     public async Task<IEnumerable<ProductDto>> GetAll()
     {
         var products = await _productRepository.GetAllProducts();
         return products;
     }
 
-    [HttpGet("{id:int}", Name = "GetProductById")]
+    [HttpGet("/products/{id:int}", Name = "GetProductById")]
     public async Task<ProductDto> GetProductById(int id)
     {
         var product = await _productRepository.GetProduct(id);
