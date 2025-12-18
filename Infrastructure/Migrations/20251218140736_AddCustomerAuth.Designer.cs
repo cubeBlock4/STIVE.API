@@ -4,6 +4,7 @@ using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(StiveContext))]
-    partial class StiveContextModelSnapshot : ModelSnapshot
+    [Migration("20251218140736_AddCustomerAuth")]
+    partial class AddCustomerAuth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,47 +88,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Familles", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.Entities.ProductEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("FamilleId")
-                        .HasColumnType("int")
-                        .HasColumnName("FamilleId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Name");
-
-                    b.Property<string>("Price")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Price");
-
-                    b.Property<string>("Reference")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Reference");
-
-                    b.Property<int>("SupplierId")
-                        .HasColumnType("int")
-                        .HasColumnName("SupplierId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FamilleId");
-
-                    b.HasIndex("SupplierId");
-
-                    b.ToTable("Products", (string)null);
-                });
-
-            modelBuilder.Entity("Infrastructure.Entities.SupplierEntity", b =>
+            modelBuilder.Entity("Core.Entities.SupplierEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -151,35 +114,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Suppliers", (string)null);
-                });
-
-            modelBuilder.Entity("Infrastructure.Entities.ProductEntity", b =>
-                {
-                    b.HasOne("Infrastructure.Entities.FamilleEntity", "Famille")
-                        .WithMany("Products")
-                        .HasForeignKey("FamilleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Infrastructure.Entities.SupplierEntity", "Supplier")
-                        .WithMany("Products")
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Famille");
-
-                    b.Navigation("Supplier");
-                });
-
-            modelBuilder.Entity("Infrastructure.Entities.FamilleEntity", b =>
-                {
-                    b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("Infrastructure.Entities.SupplierEntity", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

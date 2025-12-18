@@ -24,7 +24,7 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Infrastructure.Entities.CustomerEntity", b =>
+            modelBuilder.Entity("Core.Entities.CustomerEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,7 +52,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Customers", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.Entities.SupplierEntity", b =>
+            modelBuilder.Entity("Core.Entities.SupplierEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
