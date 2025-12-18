@@ -11,5 +11,9 @@ public class FamilleEntityConfirguration : IEntityTypeConfiguration<FamilleEntit
         builder.ToTable("Familles");
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Name).HasColumnName("Name").IsRequired();
+        
+        builder.HasMany(x => x.Products)
+            .WithOne(x => x.Famille)
+            .HasForeignKey(x => x.FamilleId);
     }
 }
