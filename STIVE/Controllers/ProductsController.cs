@@ -1,10 +1,12 @@
 using Core.Dto;
 using Core.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using STIVE.Requests.Products;
 
 namespace STIVE.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class ProductsController : ControllerBase

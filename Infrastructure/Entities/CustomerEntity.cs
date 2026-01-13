@@ -7,5 +7,6 @@ public class CustomerEntity
     public string LastName { get; set; }
     public string Email { get; set; }
     public string PasswordHash { get; set; } = string.Empty;
+    public byte[] PasswordSalt { get; set; } 
     public string Role { get; set; } = "Customer";
 }
