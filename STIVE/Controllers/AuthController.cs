@@ -37,6 +37,7 @@ public class AuthController : ControllerBase
             FirstName = registerDto.FirstName,
             LastName = registerDto.LastName,
             PasswordHash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password))), 
+            PasswordSalt = hmac.Key,
             Role = "Customer"
         };
         
@@ -60,6 +61,13 @@ public class AuthController : ControllerBase
 
         if (customer == null) return Unauthorized("Invalid username");
         
+        using var hmac = new HMACSHA512(customer.PasswordSalt);
+        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+        var computedHashString = Convert.ToBase64String(computedHash);
+
+        if (computedHashString != customer.PasswordHash) return Unauthorized("Invalid password");
+
+
         var customerDto = new CustomerDto
         {
             Id = customer.Id,
