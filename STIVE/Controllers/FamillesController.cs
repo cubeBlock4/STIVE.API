@@ -1,11 +1,13 @@
 using Core.Dto;
 using Core.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using STIVE.Requests;
 using STIVE.Requests.Familles;
 
 namespace STIVE.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class FamillesController : ControllerBase
