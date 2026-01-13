@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace STIVE.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("auth")]
 public class AuthController : ControllerBase
 {
     private readonly StiveContext _context;
