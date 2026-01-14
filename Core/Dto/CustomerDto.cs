@@ -7,5 +7,5 @@ public class CustomerDto
     public string LastName { get; set; }
     public string Email { get; set; }
 
-    public PanierDto? Panier { get; set; } = null;
+    public BasketDto? Basket { get; set; } = null;
 }
