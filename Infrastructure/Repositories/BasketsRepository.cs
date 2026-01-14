@@ -157,4 +157,161 @@ public class BasketsRepository : IBasketRepository
             await _context.SaveChangesAsync();
         }
     }
+    public async Task<BasketDto> GetBasketByCustomerId(int customerId)
+    {
+        var basket = await _context.Baskets
+            .Include(b => b.Customer)
+            .Include(b => b.Items)
+            .ThenInclude(i => i.Product)
+            .FirstOrDefaultAsync(b => b.CustomerId == customerId);
+
+        if (basket == null)
+        {
+            // Return empty basket DTO if not found, or create new? 
+            // Usually nice to return empty structure or null. 
+            // Let's create one on the fly if it doesn't exist for better user experience?
+            // "Get Basket" implies "Get MY basket". If I don't have one, I have an empty one.
+            
+            // Check if customer exists first
+            var customer = await _context.Customers.FindAsync(customerId);
+            if (customer == null) throw new Exception("Customer not found");
+
+            return new BasketDto
+            {
+                Customer = new CustomerDto
+                {
+                    Id = customer.Id,
+                    FirstName = customer.FirstName,
+                    LastName = customer.LastName,
+                    Email = customer.Email
+                },
+                Items = new List<ItemDto>()
+            };
+        }
+
+        return new BasketDto
+        {
+            Id = basket.Id,
+            Customer = new CustomerDto
+            {
+                Id = basket.Customer.Id,
+                FirstName = basket.Customer.FirstName,
+                LastName = basket.Customer.LastName,
+                Email = basket.Customer.Email
+            },
+            Items = basket.Items.Select(i => new ItemDto
+            {
+                Id = i.Id,
+                Quantity = i.Quantity,
+                Product = new ProductDto
+                {
+                    Id = i.Product.Id,
+                    Name = i.Product.Name,
+                    Reference = i.Product.Reference,
+                    Price = i.Product.Price
+                }
+            })
+        };
+    }
+
+    public async Task AddItemToBasket(int customerId, int productId, int quantity)
+    {
+        var basket = await _context.Baskets
+            .Include(b => b.Items)
+            .FirstOrDefaultAsync(b => b.CustomerId == customerId);
+
+        if (basket == null)
+        {
+            var customer = await _context.Customers.FindAsync(customerId);
+            if (customer == null) throw new Exception("Customer not found");
+            
+            basket = new BasketEntity
+            {
+                CustomerId = customerId
+            };
+            await _context.Baskets.AddAsync(basket);
+            // Save to get ID? Not needed for navigation usually, but good for consistency
+            await _context.SaveChangesAsync(); 
+        }
+
+        var product = await _context.Products.FindAsync(productId);
+        if (product == null) throw new Exception("Product not found");
+
+        var item = basket.Items.FirstOrDefault(i => i.ProductId == productId);
+        if (item != null)
+        {
+            item.Quantity += quantity;
+        }
+        else
+        {
+            item = new ItemEntity
+            {
+                Basket = basket, // EF will handle FK
+                Product = product, // EF will handle FK
+                Quantity = quantity
+            };
+            if (basket.Items == null) basket.Items = new List<ItemEntity>();
+            basket.Items.Add(item);
+        }
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateItemInBasket(int customerId, int productId, int quantity)
+    {
+        var basket = await _context.Baskets
+            .Include(b => b.Items)
+            .FirstOrDefaultAsync(b => b.CustomerId == customerId);
+            
+        if (basket == null) throw new Exception("Basket not found");
+
+        var item = basket.Items.FirstOrDefault(i => i.ProductId == productId);
+        if (item != null)
+        {
+            if (quantity <= 0)
+            {
+                 _context.Entry(item).State = EntityState.Deleted;
+                 basket.Items.Remove(item);
+            }
+            else
+            {
+                item.Quantity = quantity;
+            }
+            await _context.SaveChangesAsync();
+        }
+        else 
+        {
+            throw new Exception("Item not found in basket");
+        }
+    }
+
+    public async Task RemoveItemFromBasket(int customerId, int productId)
+    {
+        var basket = await _context.Baskets
+            .Include(b => b.Items)
+            .FirstOrDefaultAsync(b => b.CustomerId == customerId);
+            
+        if (basket == null) return; // Or throw
+
+        var item = basket.Items.FirstOrDefault(i => i.ProductId == productId);
+        if (item != null)
+        {
+            _context.Entry(item).State = EntityState.Deleted;
+             basket.Items.Remove(item);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task ClearBasket(int customerId)
+    {
+        var basket = await _context.Baskets
+            .Include(b => b.Items)
+            .FirstOrDefaultAsync(b => b.CustomerId == customerId);
+
+        if (basket != null && basket.Items != null && basket.Items.Any())
+        {
+            _context.RemoveRange(basket.Items);
+            await _context.SaveChangesAsync();
+        }
+    }
 }
