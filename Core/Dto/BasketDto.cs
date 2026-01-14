@@ -1,9 +1,9 @@
 namespace Core.Dto;
 
-public class PanierDto
+public class BasketDto
 {
     public int Id { get; set; }
     
     public CustomerDto Customer { get; set; }
-    public IEnumerable<ProductDto>? Products { get; set; } = null;
+    public IEnumerable<ItemDto>? Items { get; set; } = null;
 }

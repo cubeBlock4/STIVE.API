@@ -26,5 +26,6 @@ public static class DIExtensions
         services.AddTransient<ISupplierRepository, SuppliersRepository>();
         services.AddTransient<IFamilleRepository, FamillesRepository>();
         services.AddTransient<IProductRepository, ProductsRepository>();
+        services.AddTransient<IBasketRepository, BasketsRepository>();
     }
 }
