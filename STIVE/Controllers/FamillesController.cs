@@ -1,11 +1,13 @@
 using Core.Dto;
 using Core.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using STIVE.Requests;
 using STIVE.Requests.Familles;
 
 namespace STIVE.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class FamillesController : ControllerBase
@@ -17,14 +19,14 @@ public class FamillesController : ControllerBase
         _familleRepository = familleRepository;
     }
 
-    [HttpGet]
+    [HttpGet("/familles")]
     public async Task<IEnumerable<FamilleDto>> GetAll()
     {
         var familles = await _familleRepository.GetAllFamilles();
         return familles;
     }
 
-    [HttpGet("{id:int}", Name = "GetFamilleById")]
+    [HttpGet("/familles/{id:int}", Name = "GetFamilleById")]
     public async Task<FamilleDto> GetFamilleById(int id)
     {
         var famille = await _familleRepository.GetFamille(id);

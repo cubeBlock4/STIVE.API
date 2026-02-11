@@ -14,11 +14,15 @@ public class StiveContext : DbContext
     public DbSet<CustomerEntity> Customers { get; set; }
     public DbSet<SupplierEntity> Suppliers { get; set; }
     public DbSet<FamilleEntity> Familles { get; set; }
+    public DbSet<ProductEntity> Products { get; set; }
+    public DbSet<BasketEntity> Baskets { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new CustomerEntityConfirguration());
         modelBuilder.ApplyConfiguration(new SupplierEntityConfirguration());
         modelBuilder.ApplyConfiguration(new FamilleEntityConfirguration());
+        modelBuilder.ApplyConfiguration(new ProductEntityConfirguration());
+        modelBuilder.ApplyConfiguration(new BasketEntityConfiguration());
     }
 }

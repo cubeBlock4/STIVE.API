@@ -3,6 +3,7 @@ using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(StiveContext))]
-    partial class StiveContextModelSnapshot : ModelSnapshot
+    [Migration("20260113082220_AddPasswordSalt")]
+    partial class AddPasswordSalt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,26 +23,6 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Infrastructure.Entities.BasketEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int")
-                        .HasColumnName("CustomerId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
-
-                    b.ToTable("Baskets", (string)null);
-                });
 
             modelBuilder.Entity("Infrastructure.Entities.CustomerEntity", b =>
                 {
@@ -97,32 +80,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Familles", (string)null);
-                });
-
-            modelBuilder.Entity("Infrastructure.Entities.ItemEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BasketId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BasketId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ItemEntity");
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.ProductEntity", b =>
@@ -193,36 +150,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Suppliers", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.Entities.BasketEntity", b =>
-                {
-                    b.HasOne("Infrastructure.Entities.CustomerEntity", "Customer")
-                        .WithOne("Basket")
-                        .HasForeignKey("Infrastructure.Entities.BasketEntity", "CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("Infrastructure.Entities.ItemEntity", b =>
-                {
-                    b.HasOne("Infrastructure.Entities.BasketEntity", "Basket")
-                        .WithMany("Items")
-                        .HasForeignKey("BasketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Infrastructure.Entities.ProductEntity", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Basket");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Infrastructure.Entities.ProductEntity", b =>
                 {
                     b.HasOne("Infrastructure.Entities.FamilleEntity", "Famille")
@@ -240,16 +167,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Famille");
 
                     b.Navigation("Supplier");
-                });
-
-            modelBuilder.Entity("Infrastructure.Entities.BasketEntity", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("Infrastructure.Entities.CustomerEntity", b =>
-                {
-                    b.Navigation("Basket");
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.FamilleEntity", b =>

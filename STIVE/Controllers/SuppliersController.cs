@@ -1,10 +1,12 @@
 using Core.Dto;
 using Core.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using STIVE.Requests.Suppliers;
 
 namespace STIVE.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class SuppliersController : ControllerBase
@@ -16,14 +18,14 @@ public class SuppliersController : ControllerBase
         _supplierRepository = supplierRepository;
     }
 
-    [HttpGet]
+    [HttpGet("/suppliers")]
     public async Task<IEnumerable<SupplierDto>> GetAll()
     {
         var suppliers = await _supplierRepository.GetAllSuppliers();
         return suppliers;
     }
 
-    [HttpGet("{id:int}", Name = "GetSupplierById")]
+    [HttpGet("/suppliers/{id:int}", Name = "GetSupplierById")]
     public async Task<SupplierDto> GetSupplierById(int id)
     {
         var supplier = await _supplierRepository.GetSupplier(id);

@@ -1,0 +1,87 @@
+@host = http://localhost:5072
+@email = teomullerheddarr@gmail.com
+@password = Azerty123!
+@firstname = Teo
+@lastname = Muller Heddar
+
+### 1. Login to get Token
+# @name login
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}"
+}
+
+### 1.2. Register
+# @name register
+POST {{host}}/auth/register
+Content-Type: application/json
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}",
+    "firstname": "{{firstname}}",
+    "lastname": "{{lastname}}"
+}
+
+### Variable for Token
+@authToken = {{login.response.body.token}}
+
+### 2. Get My Basket (Should be empty initially)
+GET {{host}}/basket
+Authorization: Bearer {{authToken}}
+
+### 3. Add Item to Basket
+POST {{host}}/basket/items
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "productId": 1,
+    "quantity": 2
+}
+
+### 4. Get My Basket (Should have 1 item)
+GET {{host}}/basket
+Authorization: Bearer {{authToken}}
+
+### 5. Update Item Quantity
+PUT {{host}}/basket/items/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "quantity": 5
+}
+
+### 6. Get My Basket (Quantity should be 5)
+GET {{host}}/basket
+Authorization: Bearer {{authToken}}
+
+### 7. Remove Item
+DELETE {{host}}/basket/items/1
+Authorization: Bearer {{authToken}}
+
+### 8. Get My Basket (Should be empty)
+GET {{host}}/basket
+Authorization: Bearer {{authToken}}
+
+### 9. Add multiple items for Clear test
+POST {{host}}/basket/items
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "productId": 1,
+    "quantity": 1
+}
+
+### 10. Clear Basket
+DELETE {{host}}/basket
+Authorization: Bearer {{authToken}}
+
+### 11. Get My Basket (Should be empty)
+GET {{host}}/basket
+Authorization: Bearer {{authToken}}

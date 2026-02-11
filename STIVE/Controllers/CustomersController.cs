@@ -1,10 +1,12 @@
 using Core.Dto;
 using Core.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using STIVE.Requests;
 
 namespace STIVE.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class CustomersController : ControllerBase
@@ -16,14 +18,14 @@ public class CustomersController : ControllerBase
         _customerRepository = customerRepository;
     }
 
-    [HttpGet]
+    [HttpGet("/customers")]
     public async Task<IEnumerable<CustomerDto>> GetAll()
     {
         var customers = await _customerRepository.GetAllCustomers();
         return customers;
     }
 
-    [HttpGet("{id:int}", Name = "GetCustomerById")]
+    [HttpGet("/customers/{id:int}", Name = "GetCustomerById")]
     public async Task<CustomerDto> GetCustomerById(int id)
     {
         var customer = await _customerRepository.GetCustomer(id);

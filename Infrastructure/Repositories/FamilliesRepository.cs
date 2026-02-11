@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class FamilliesRepository : IFamilleRepository
+public class FamillesRepository : IFamilleRepository
 {
     
     private readonly StiveContext  _context;
 
-    public FamilliesRepository(StiveContext context)
+    public FamillesRepository(StiveContext context)
     {
         _context = context;
     }
