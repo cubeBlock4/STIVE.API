@@ -83,6 +83,28 @@ public class AuthController : ControllerBase
         };
     }
 
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<ActionResult<CustomerDto>> GetCurrentUser()
+    {
+        var userIdClaim = User.FindFirst("id")?.Value;
+
+        if (userIdClaim == null || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized();
+
+        var customer = await _context.Customers.FindAsync(userId);
+
+        if (customer == null) return NotFound();
+
+        return new CustomerDto
+        {
+            Id = customer.Id,
+            Email = customer.Email,
+            FirstName = customer.FirstName,
+            LastName = customer.LastName
+        };
+    }
+
     private async Task<bool> UserExists(string email)
     {
         return await _context.Customers.AnyAsync(x => x.Email == email.ToLower());
