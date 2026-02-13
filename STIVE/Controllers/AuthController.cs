@@ -1,12 +1,7 @@
-using System.Security.Cryptography;
-using System.Text;
 using Core.Dto;
 using Core.Interfaces;
-using Infrastructure.Context;
-using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace STIVE.Controllers;
 
@@ -14,73 +9,35 @@ namespace STIVE.Controllers;
 [Route("auth")]
 public class AuthController : ControllerBase
 {
-    private readonly StiveContext _context;
-    private readonly ITokenService _tokenService;
+    private readonly IUserService _userService;
 
-    public AuthController(StiveContext context, ITokenService tokenService)
+    public AuthController(IUserService userService)
     {
-        _context = context;
-        _tokenService = tokenService;
+        _userService = userService;
     }
 
     [HttpPost("register")]
     public async Task<ActionResult<CustomerDto>> Register(RegisterDto registerDto)
     {
-        if (await UserExists(registerDto.Email))
+        if (await _userService.UserExistsAsync(registerDto.Email))
             return BadRequest("Email is taken");
 
-        using var hmac = new HMACSHA512();
-
-        var customer = new CustomerEntity
-        {
-            Email = registerDto.Email.ToLower(),
-            FirstName = registerDto.FirstName,
-            LastName = registerDto.LastName,
-            PasswordHash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password))), 
-            PasswordSalt = hmac.Key,
-            Role = "Customer"
-        };
-        
-        _context.Customers.Add(customer);
-        await _context.SaveChangesAsync();
-
-        return new CustomerDto
-        {
-            Id = customer.Id,
-            Email = customer.Email,
-            FirstName = customer.FirstName,
-            LastName = customer.LastName
-        };
+        var customer = await _userService.RegisterAsync(registerDto);
+        return customer;
     }
 
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponseDto>> Login(LoginDto loginDto)
     {
-        var customer = await _context.Customers
-            .SingleOrDefaultAsync(x => x.Email == loginDto.Email.ToLower());
-
-        if (customer == null) return Unauthorized("Invalid username");
-        
-        using var hmac = new HMACSHA512(customer.PasswordSalt);
-        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-        var computedHashString = Convert.ToBase64String(computedHash);
-
-        if (computedHashString != customer.PasswordHash) return Unauthorized("Invalid password");
-
-
-        var customerDto = new CustomerDto
+        try
         {
-            Id = customer.Id,
-            Email = customer.Email,
-            FirstName = customer.FirstName,
-            LastName = customer.LastName
-        };
-
-        return new LoginResponseDto
+            var response = await _userService.LoginAsync(loginDto);
+            return response;
+        }
+        catch (UnauthorizedAccessException ex)
         {
-            User = customerDto,
-            Token = _tokenService.CreateToken(customerDto)
-        };
+            return Unauthorized(ex.Message);
+        }
     }
 
     [Authorize]
@@ -92,21 +49,22 @@ public class AuthController : ControllerBase
         if (userIdClaim == null || !int.TryParse(userIdClaim, out var userId))
             return Unauthorized();
 
-        var customer = await _context.Customers.FindAsync(userId);
+        var customer = await _userService.GetUserByIdAsync(userId);
 
         if (customer == null) return NotFound();
 
-        return new CustomerDto
-        {
-            Id = customer.Id,
-            Email = customer.Email,
-            FirstName = customer.FirstName,
-            LastName = customer.LastName
-        };
+        return customer;
     }
 
-    private async Task<bool> UserExists(string email)
+    [Authorize]
+    [HttpPost("reset-password")]
+    public async Task<ActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
     {
-        return await _context.Customers.AnyAsync(x => x.Email == email.ToLower());
+        var result = await _userService.ResetPasswordAsync(resetPasswordDto);
+
+        if (!result)
+            return BadRequest("Invalid email or current password");
+
+        return Ok("Password has been reset successfully");
     }
 }

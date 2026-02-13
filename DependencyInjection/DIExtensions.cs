@@ -1,7 +1,9 @@
+using Core.Interfaces;
 using Core.Repositories;
 using Infrastructure;
 using Infrastructure.Context;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,5 +29,7 @@ public static class DIExtensions
         services.AddTransient<IFamilleRepository, FamillesRepository>();
         services.AddTransient<IProductRepository, ProductsRepository>();
         services.AddTransient<IBasketRepository, BasketsRepository>();
+
+        services.AddScoped<IUserService, UserService>();
     }
 }

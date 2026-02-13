@@ -26,6 +26,21 @@ Content-Type: application/json
     "lastname": "{{lastname}}"
 }
 
+### 1.3. Get Current User
+GET {{host}}/auth/me
+Authorization: Bearer {{authToken}}
+
+### 1.4. Reset Password
+POST {{host}}/auth/reset-password
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "email": "{{email}}",
+    "currentPassword": "{{password}}",
+    "newPassword": "NewPassword123!"
+}
+
 ### Variable for Token
 @authToken = {{login.response.body.token}}
 
